@@ -60,7 +60,7 @@ class SyntaxDemoTest {
 
         @Test
         void 문자열() {
-            String message = "취소 가능 금액을 초과했습니다";
+            String message = "취소 가능 금액을 초과했습니다.";
 
             assertThat(message).contains("초과");
             assertThat(message).startsWith("취소");
