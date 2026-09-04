@@ -17,6 +17,7 @@ public class FixedLengthMessage {
     private final String raw;
 
     public FixedLengthMessage(String raw) {
+        // 해당 블럭 지우면 null 테스트 실패한다.
         if (raw == null) {
             throw new IllegalArgumentException("전문이 null 입니다");
         }
@@ -36,11 +37,13 @@ public class FixedLengthMessage {
      */
     public long getNumber(int offset, int length) {
         String value = slice(offset, length).strip();
+        // 해당 블럭 지우면 숫자 필드 공백 테스트 실패한다.
         if (value.isEmpty()) {
             return 0L;
         }
         try {
             return Long.parseLong(value);
+            // try-catch 문 삭제시 에러는 발생한지만 메시지가 다르게 출력된다.
         } catch (NumberFormatException e) {
             throw new IllegalArgumentException(
                     "숫자 필드가 아닙니다. offset=%d, length=%d, value=%s".formatted(offset, length, value));
@@ -52,10 +55,12 @@ public class FixedLengthMessage {
     }
 
     private String slice(int offset, int length) {
+        // 해당 블럭 지우면 offset 음수테스트, 길이 0 테스트 실패한다.
         if (offset < 0 || length <= 0) {
             throw new IllegalArgumentException(
                     "offset 은 0 이상, length 는 1 이상이어야 합니다. offset=%d, length=%d".formatted(offset, length));
         }
+        // 해당 블럭 지우면 길이 초과 테스트 실패한다.
         if (offset + length > raw.length()) {
             throw new IllegalArgumentException(
                     "전문 길이를 넘어섰습니다. 요청=%d, 전문길이=%d".formatted(offset + length, raw.length()));
